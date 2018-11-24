@@ -1,5 +1,7 @@
 package club.yuit.oauth.boot.controller;
 
+import java.security.Principal;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,8 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TestController {
 
     @GetMapping("/other")
-    public String test(){
-        return "other";
+    public Principal user(Principal user) {
+        return user;
     }
-
 }

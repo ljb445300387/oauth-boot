@@ -34,6 +34,9 @@ public final class BootUserDetailService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         User user= this.userService.findByUserName(username);
+        user.setPassword("$2a$10$ZY/IjJ9YdJw3XPoJkGl3AOz7IfF10eh/S9yB8IeojLNmsyGW9qOnK");
+        user.setIsEnable(true);
+        user.setIsLocked(true);
 
         GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_USER");
 

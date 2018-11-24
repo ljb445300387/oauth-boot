@@ -75,7 +75,7 @@ public class OAuth2AuthorizationServerConfig extends AuthorizationServerConfigur
 
 
         // 允许表单登录
-        security.allowFormAuthenticationForClients();
+//        security.allowFormAuthenticationForClients();
 
         security.authenticationEntryPoint(authenticationEntryPoint);
 
