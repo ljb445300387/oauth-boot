@@ -9,11 +9,16 @@ package club.yuit.oauth.boot.exception;
  **/
 public class ArgumentsFailureException extends RuntimeException {
 
-    public ArgumentsFailureException() {
-        this("参数错误");
-    }
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
-    public ArgumentsFailureException(String message) {
-        super(message);
-    }
+	public ArgumentsFailureException() {
+		this("参数错误");
+	}
+
+	public ArgumentsFailureException(String message) {
+		super(message);
+	}
 }

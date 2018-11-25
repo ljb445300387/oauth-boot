@@ -14,11 +14,15 @@ import java.io.IOException;
  */
 public class HttpUtils {
 
-    public static void writerError(BaseResponse bs, HttpServletResponse response) throws IOException {
-        response.setContentType("application/json,charset=utf-8");
-        response.setStatus(bs.getStatus());
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.writeValue(response.getOutputStream(),bs);
-    }
+	public static void writerError(BaseResponse bs, HttpServletResponse response) {
+		response.setContentType("application/json,charset=utf-8");
+		response.setStatus(bs.getStatus());
+		ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			objectMapper.writeValue(response.getOutputStream(), bs);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 }

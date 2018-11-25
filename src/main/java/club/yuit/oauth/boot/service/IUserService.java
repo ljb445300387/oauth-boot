@@ -12,15 +12,14 @@ import java.util.List;
  * @modify by
  * @modify time
  **/
-public interface IUserService  extends IService<User> {
+public interface IUserService extends IService<User> {
 
-    /**
-     * 获取所有用户
-     * @return
-     */
-    public List<User> getUsers();
+	/**
+	 * 获取所有用户
+	 * @return
+	 */
+	public List<User> getUsers();
 
-
-    User findByUserName(String userName);
+	User findByUserName(String userName);
 
 }

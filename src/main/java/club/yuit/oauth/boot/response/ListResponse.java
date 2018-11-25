@@ -1,10 +1,9 @@
 package club.yuit.oauth.boot.response;
 
-import lombok.Data;
+import java.util.List;
+
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
 
 /**
  * @author yuit
@@ -18,7 +17,7 @@ import java.util.List;
 public class ListResponse extends BaseResponse {
 
     private long count;
-    private List items;
+    private List<?> items;
 
     protected ListResponse(){
 

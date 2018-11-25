@@ -1,11 +1,9 @@
 package club.yuit.oauth.boot.support.properities;
 
+import java.io.Serializable;
+
 import lombok.Getter;
 import lombok.Setter;
-import lombok.experimental.Accessors;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-
-import java.io.Serializable;
 
 /**
  * @auther yuit
@@ -16,7 +14,6 @@ import java.io.Serializable;
 @Getter
 @Setter
 public class BootLogLevelProperties implements Serializable {
-
-    private String level = "INFO";
-
+	private static final long serialVersionUID = 1L;
+	private String level = "INFO";
 }

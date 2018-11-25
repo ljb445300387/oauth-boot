@@ -1,6 +1,5 @@
 package club.yuit.oauth.boot.response;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 

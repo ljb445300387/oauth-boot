@@ -1,14 +1,15 @@
 package club.yuit.oauth.boot.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Data;
+import java.util.List;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.List;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+
+import lombok.Data;
 
 /**
  * @author yuit
@@ -20,7 +21,8 @@ import java.util.List;
 @Data
 @TableName("user")
 public class User implements UserDetails {
-    @TableId
+	private static final long serialVersionUID = 1L;
+	@TableId
     private String id;
     private String username;
     private String email;
@@ -48,7 +50,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return this.isLocked;
+        return !this.isLocked;
     }
 
     @Override

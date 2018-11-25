@@ -16,26 +16,30 @@ import java.util.Map;
  */
 public class BootOAuthExceptionJacksonSerializer extends StdSerializer<BootOAuth2Exception> {
 
-    protected BootOAuthExceptionJacksonSerializer() {
-        super(BootOAuth2Exception.class);
-    }
+	protected BootOAuthExceptionJacksonSerializer() {
+		super(BootOAuth2Exception.class);
+	}
 
-    @Override
-    public void serialize(BootOAuth2Exception value, JsonGenerator jgen, SerializerProvider serializerProvider) throws IOException {
-        jgen.writeStartObject();
-        jgen.writeObjectField("status", value.getHttpErrorCode());
-        String errorMessage = value.getOAuth2ErrorCode();
-        if (errorMessage != null) {
-            errorMessage = HtmlUtils.htmlEscape(errorMessage);
-        }
-        jgen.writeStringField("msg", errorMessage);
-        if (value.getAdditionalInformation()!=null) {
-            for (Map.Entry<String, String> entry : value.getAdditionalInformation().entrySet()) {
-                String key = entry.getKey();
-                String add = entry.getValue();
-                jgen.writeStringField(key, add);
-            }
-        }
-        jgen.writeEndObject();
-    }
+	@Override
+	public void serialize(BootOAuth2Exception value, JsonGenerator jgen, SerializerProvider serializerProvider) {
+		try {
+			jgen.writeStartObject();
+			jgen.writeObjectField("status", value.getHttpErrorCode());
+			String errorMessage = value.getOAuth2ErrorCode();
+			if (errorMessage != null) {
+				errorMessage = HtmlUtils.htmlEscape(errorMessage);
+			}
+			jgen.writeStringField("msg", errorMessage);
+			if (value.getAdditionalInformation() != null) {
+				for (Map.Entry<String, String> entry : value.getAdditionalInformation().entrySet()) {
+					String key = entry.getKey();
+					String add = entry.getValue();
+					jgen.writeStringField(key, add);
+				}
+			}
+			jgen.writeEndObject();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
 }

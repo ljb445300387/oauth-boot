@@ -36,55 +36,50 @@ import java.util.List;
 @EnableSwagger2
 public class CoreConfig extends WebMvcConfigurationSupport {
 
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
-        registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
-    }
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		registry.addResourceHandler("/swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
+		registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+	}
 
-    /**
-     * Could not resolve view with name 'forward:/oauth/confirm_access' in servlet with name 'dispatcherServlet'
-     * @param registry
-     */
-    /*@Override
-    protected void configureViewResolvers(ViewResolverRegistry registry) {
+	/**
+	 * Could not resolve view with name 'forward:/oauth/confirm_access' in servlet with name 'dispatcherServlet'
+	 * @param registry
+	 */
+	/*@Override
+	protected void configureViewResolvers(ViewResolverRegistry registry) {
+	    registry.viewResolver(new InternalResourceViewResolver());
+	}*/
 
+	@Bean
+	public Docket docket() {
 
+		ParameterBuilder builder = new ParameterBuilder();
+		List<Parameter> parameters = new ArrayList<>();
 
-        registry.viewResolver(new InternalResourceViewResolver());
-    }*/
+		builder.name("Authorization")//
+				.description("token")//
+				.modelRef(new ModelRef("string"))//
+				.parameterType("header")//
+				.required(false)//
+				.build();
+		parameters.add(builder.build());
 
-    @Bean
-    public Docket docket() {
+		return new Docket(DocumentationType.SWAGGER_2)//
+				.apiInfo(this.apiInfo())//
+				.select()//
+				.apis(RequestHandlerSelectors.basePackage("club.yuit.oauth.boot.controller"))//
+				.paths(PathSelectors.any())//
+				.build();
+	}
 
-        ParameterBuilder builder = new ParameterBuilder();
-        List<Parameter> parameters = new ArrayList<>();
-
-        builder.name("Authorization").description("token").modelRef(new ModelRef("string"))
-                .parameterType("header")
-                .required(false)
-                .build();
-        parameters.add(builder.build());
-
-        return new Docket(DocumentationType.SWAGGER_2)
-                .globalOperationParameters(parameters)
-                .apiInfo(this.apiInfo())
-                .select()
-                .apis(RequestHandlerSelectors.basePackage("club.yuit.oauth.boot.controller"))
-                .paths(PathSelectors.any())
-                .build();
-    }
-
-    private ApiInfo apiInfo() {
-        return new ApiInfoBuilder()
-                .title("Boot API")
-                .description("创建于 2018-10-12")
-                .contact(new Contact("yuit", "", "1239964852g@gmail.com"))
-                .version("1.0")
-                .build();
-    }
-
-
-
+	private ApiInfo apiInfo() {
+		return new ApiInfoBuilder()//
+				.title("Boot API")//
+				.description("创建于 2018-10-12")//
+				.contact(new Contact("yuit", "", "1239964852g@gmail.com"))//
+				.version("1.0")//
+				.build();
+	}
 
 }

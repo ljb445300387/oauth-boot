@@ -9,7 +9,12 @@ package club.yuit.oauth.boot.exception;
  **/
 public class AuthFailureException extends RuntimeException {
 
-    public AuthFailureException() {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public AuthFailureException() {
         this("认证失败！");
     }
 

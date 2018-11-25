@@ -1,8 +1,8 @@
 package club.yuit.oauth.boot.response;
 
-import lombok.Data;
-
 import java.util.List;
+
+import lombok.Data;
 
 /**
  * @author yuit
@@ -17,9 +17,9 @@ public class PageQueryItems {
     private Integer currentPage;
     private Integer pageSize;
     private Long count;
-    private List items;
+    private List<?> items;
 
-    public PageQueryItems(Integer currentPage, Integer pageSize, Long count, List items) {
+    public PageQueryItems(Integer currentPage, Integer pageSize, Long count, List<?> items) {
         this.currentPage = currentPage;
         this.pageSize = pageSize;
         this.count = count;

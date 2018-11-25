@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TestController {
 
-    @GetMapping("/other")
-    public Principal user(Principal user) {
-        return user;
-    }
+	@GetMapping("/other")
+	public Principal user(Principal user) {
+		return user;
+	}
 }

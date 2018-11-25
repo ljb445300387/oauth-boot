@@ -1,9 +1,7 @@
 package club.yuit.oauth.boot.controller;
 
-import club.yuit.oauth.boot.entity.Client;
-import club.yuit.oauth.boot.response.BaseResponse;
-import club.yuit.oauth.boot.response.HttpResponse;
-import club.yuit.oauth.boot.service.IClientService;
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,7 +9,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
+import club.yuit.oauth.boot.entity.Client;
+import club.yuit.oauth.boot.response.BaseResponse;
+import club.yuit.oauth.boot.response.HttpResponse;
+import club.yuit.oauth.boot.service.IClientService;
 
 /**
  * @author yuit
@@ -32,9 +33,8 @@ public class ClientController {
 
     @PostMapping("/register")
     public BaseResponse clientRegistered(@RequestBody @Valid Client client) {
-
         client.setClientSecret(passwordEncoder.encode(client.getClientSecret()));
-        boolean i = clientService.save(client);
+        clientService.save(client);
         return HttpResponse.baseResponse(200);
     }
 

@@ -9,7 +9,12 @@ package club.yuit.oauth.boot.exception;
  **/
 public class NotAuthException extends RuntimeException {
 
-    public NotAuthException() {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public NotAuthException() {
         this("没有认证！");
     }
 

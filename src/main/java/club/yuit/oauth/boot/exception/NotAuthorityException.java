@@ -9,7 +9,12 @@ package club.yuit.oauth.boot.exception;
  **/
 public class NotAuthorityException extends RuntimeException{
 
-    public NotAuthorityException() {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public NotAuthorityException() {
         this("没有权限！");
     }
 

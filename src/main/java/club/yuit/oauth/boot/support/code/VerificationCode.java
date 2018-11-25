@@ -9,17 +9,16 @@ import lombok.Data;
  * @modify
  */
 @Data
-public  class VerificationCode {
+public class VerificationCode {
 
-    private String code;
-    private Integer expirationTime;
+	private String code;
+	private Integer expirationTime;
 
-    public VerificationCode() {
-    }
+	public VerificationCode() {
+	}
 
-
-    public VerificationCode(String code, Integer expirationTime) {
-        this.code = code;
-        this.expirationTime = expirationTime;
-    }
+	public VerificationCode(String code, Integer expirationTime) {
+		this.code = code;
+		this.expirationTime = expirationTime;
+	}
 }

@@ -19,17 +19,13 @@ import java.util.Map;
 @SessionAttributes("authorizationRequest")
 public class BootGrantController {
 
-    @RequestMapping("/custom/confirm_access")
-    public ModelAndView getAccessConfirmation(Map<String, Object> model, HttpServletRequest request) throws Exception {
-
-        AuthorizationRequest authorizationRequest = (AuthorizationRequest) model.get("authorizationRequest");
-
-        ModelAndView view = new ModelAndView();
-        view.setViewName("base-grant");
-
-        view.addObject("clientId", authorizationRequest.getClientId());
-
-        return view;
-    }
+	@RequestMapping("/custom/confirm_access")
+	public ModelAndView getAccessConfirmation(Map<String, Object> model, HttpServletRequest request) throws Exception {
+		AuthorizationRequest authorizationRequest = (AuthorizationRequest) model.get("authorizationRequest");
+		ModelAndView view = new ModelAndView();
+		view.setViewName("base-grant");
+		view.addObject("clientId", authorizationRequest.getClientId());
+		return view;
+	}
 
 }

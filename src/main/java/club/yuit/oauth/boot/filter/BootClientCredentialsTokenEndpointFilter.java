@@ -41,95 +41,91 @@ import java.util.Base64;
 @Component
 public class BootClientCredentialsTokenEndpointFilter extends OncePerRequestFilter {
 
-    @Autowired
-    private ClientDetailsService clientDetailsService;
+	@Autowired
+	private ClientDetailsService clientDetailsService;
 
+	@Override
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+			throws ServletException, IOException {
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+		if (!request.getRequestURI().equals("/oauth/token") || !request.getParameter("grant_type").equals("password")) {
+			filterChain.doFilter(request, response);
+			return;
+		}
 
+		String[] clientDetails = this.isHasClientDetails(request);
 
-        if (!request.getRequestURI().equals("/oauth/token") ||
-                !request.getParameter("grant_type").equals("password")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
+		if (clientDetails == null) {
+			BaseResponse bs = HttpResponse.baseResponse(HttpStatus.UNAUTHORIZED.value(), "请求中未包含客户端信息");
+			HttpUtils.writerError(bs, response);
+			return;
+		}
 
-        String[] clientDetails = this.isHasClientDetails(request);
+		this.handle(request, response, clientDetails, filterChain);
 
-        if (clientDetails == null) {
-            BaseResponse bs = HttpResponse.baseResponse(HttpStatus.UNAUTHORIZED.value(), "请求中未包含客户端信息");
-            HttpUtils.writerError(bs, response);
-            return;
-        }
+	}
 
-       this.handle(request,response,clientDetails,filterChain);
+	private void handle(HttpServletRequest request, HttpServletResponse response, String[] clientDetails,
+			FilterChain filterChain) throws IOException, ServletException {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
+		if (authentication != null && authentication.isAuthenticated()) {
+			filterChain.doFilter(request, response);
+			return;
+		}
 
-    }
+		BootClientDetails details = (BootClientDetails) this.clientDetailsService
+				.loadClientByClientId(clientDetails[0]);
+		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(details.getClientId(),
+				details.getClientSecret(), details.getAuthorities());
 
-    private void handle(HttpServletRequest request, HttpServletResponse response, String[] clientDetails,FilterChain filterChain) throws IOException, ServletException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		SecurityContextHolder.getContext().setAuthentication(token);
 
-        if (authentication != null && authentication.isAuthenticated()) {
-            filterChain.doFilter(request,response);
-            return;
-        }
+		filterChain.doFilter(request, response);
+	}
 
+	// 判断请求头中是否包含client信息，不包含返回false
+	private String[] isHasClientDetails(HttpServletRequest request) {
 
-        BootClientDetails details = (BootClientDetails) this.clientDetailsService.loadClientByClientId(clientDetails[0]);
-        UsernamePasswordAuthenticationToken token =
-                new UsernamePasswordAuthenticationToken(details.getClientId(), details.getClientSecret(), details.getAuthorities());
+		String[] params = null;
 
-        SecurityContextHolder.getContext().setAuthentication(token);
+		String header = request.getHeader(HttpHeaders.AUTHORIZATION);
 
+		if (header != null) {
 
-        filterChain.doFilter(request,response);
-    }
+			String basic = header.substring(0, 5);
 
-    // 判断请求头中是否包含client信息，不包含返回false
-    private String[] isHasClientDetails(HttpServletRequest request) {
+			if (basic.toLowerCase().contains("basic")) {
 
-        String[] params = null;
+				String tmp = header.substring(6);
+				String defaultClientDetails = new String(Base64.getDecoder().decode(tmp));
 
-        String header = request.getHeader(HttpHeaders.AUTHORIZATION);
+				String[] clientArrays = defaultClientDetails.split(":");
 
-        if (header != null) {
+				if (clientArrays.length != 2) {
+					return params;
+				} else {
+					params = clientArrays;
+				}
 
-            String basic = header.substring(0, 5);
+			}
+		}
 
-            if (basic.toLowerCase().contains("basic")) {
+		String id = request.getParameter("client_id");
+		String secret = request.getParameter("client_secret");
 
-                String tmp = header.substring(6);
-                String defaultClientDetails = new String(Base64.getDecoder().decode(tmp));
+		if (header == null && id != null) {
+			params = new String[] { id, secret };
+		}
 
-                String[] clientArrays = defaultClientDetails.split(":");
+		return params;
+	}
 
-                if (clientArrays.length != 2) {
-                    return params;
-                } else {
-                    params = clientArrays;
-                }
+	public ClientDetailsService getClientDetailsService() {
+		return clientDetailsService;
+	}
 
-            }
-        }
-
-        String id = request.getParameter("client_id");
-        String secret = request.getParameter("client_secret");
-
-        if (header == null && id != null) {
-            params = new String[]{id, secret};
-        }
-
-
-        return params;
-    }
-
-    public ClientDetailsService getClientDetailsService() {
-        return clientDetailsService;
-    }
-
-    public void setClientDetailsService(ClientDetailsService clientDetailsService) {
-        this.clientDetailsService = clientDetailsService;
-    }
+	public void setClientDetailsService(ClientDetailsService clientDetailsService) {
+		this.clientDetailsService = clientDetailsService;
+	}
 }

@@ -9,7 +9,6 @@ package club.yuit.oauth.boot.response;
  **/
 public enum OrderType {
 
-    ASC,
-    DESC
+	ASC, DESC
 
 }

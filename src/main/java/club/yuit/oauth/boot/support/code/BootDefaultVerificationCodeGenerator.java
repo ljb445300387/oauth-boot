@@ -1,12 +1,12 @@
 package club.yuit.oauth.boot.support.code;
 
-import club.yuit.oauth.boot.support.BootSecurityProperties;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.ServletWebRequest;
+
+import club.yuit.oauth.boot.support.BootSecurityProperties;
 
 /**
  * @auther yuit
@@ -27,6 +27,5 @@ public class BootDefaultVerificationCodeGenerator implements VerificationCodeGen
         String smsCode=RandomStringUtils.randomNumeric(properties.getSms().getLength());
         return new VerificationCode(smsCode,properties.getSms().getExpirationTime());
     }
-
 
 }

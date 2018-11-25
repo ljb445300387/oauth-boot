@@ -17,24 +17,22 @@ import java.util.List;
  * @modify time
  **/
 @Service
-public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements IUserService {
+public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
 
-    @Autowired
-    private UserMapper userMapper;
+	@Autowired
+	private UserMapper userMapper;
 
+	@Override
+	public List<User> getUsers() {
 
-    @Override
-    public List<User> getUsers() {
+		this.userMapper.findByUserName("yuit");
 
-        User dd= this.userMapper.findByUserName("yuit");
+		return this.userMapper.selectList(null);
+	}
 
-        return this.userMapper.selectList(null);
-    }
-
-    @Override
-    public User findByUserName(String userName) {
-        return this.userMapper.findByUserName(userName);
-    }
-
+	@Override
+	public User findByUserName(String userName) {
+		return this.userMapper.findByUserName(userName);
+	}
 
 }

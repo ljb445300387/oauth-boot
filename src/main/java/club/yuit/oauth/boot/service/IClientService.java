@@ -13,5 +13,5 @@ import org.apache.ibatis.annotations.Param;
  **/
 
 public interface IClientService extends IService<Client> {
-    Client findClientByClientId(@Param("id") String clientId);
+	Client findClientByClientId(@Param("id") String clientId);
 }

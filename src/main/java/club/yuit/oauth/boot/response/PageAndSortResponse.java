@@ -1,10 +1,9 @@
 package club.yuit.oauth.boot.response;
 
-import lombok.Data;
+import java.util.List;
+
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
 
 /**
  * @author yuit
@@ -17,11 +16,12 @@ import java.util.List;
 @Setter
 public class PageAndSortResponse extends BaseResponse {
 
-    private Integer currentPage;
-    private Integer pageSize;
-    private long count;
-    List items;
+	private Integer currentPage;
+	private Integer pageSize;
+	private long count;
+	List<?> items;
 
-    protected PageAndSortResponse(){}
+	protected PageAndSortResponse() {
+	}
 
 }
