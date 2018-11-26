@@ -42,7 +42,16 @@ public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter 
 
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().anyRequest().access("#oauth2.hasAnyScope('all')");
+		http.authorizeRequests()
+		.antMatchers(
+				"/static/bower_components/bootstrap/dist/css/bootstrap.min.css", //
+				"/static/css/**", //
+				"/static/dist/**", //
+				"/static/fonts/**", //
+				"/static/lib/**", //
+				"/static/bootstrap.min.css"
+				)
+		.permitAll().anyRequest().access("#oauth2.hasAnyScope('all')").and().csrf().disable();
 	}
 
 }

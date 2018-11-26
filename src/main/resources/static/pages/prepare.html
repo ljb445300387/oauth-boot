@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>联合建模平台</title>
+    <!-- Custom styles for this template -->
+    <link href="../css/demo.css" rel="stylesheet">
+    <link href="../css/3.3.7-bootstrap.min.css" rel="stylesheet">
+    <script src="../lib/2.1.1-jquery.min.js"></script>
+    <script src="../lib/3.3.7-bootstrap.min.js"></script>
+    <script src="../lib/angularJS-1.4.6.js"></script>
+    <script src="../lib/showVia.js"></script>
+
+    <!-- web-uploader -->
+    <link href="../css/webuploader.css" rel="stylesheet">
+    <script src="../lib/webuploader.js"></script>
+
+    <!-- easyUI -->
+    <link href="../css/easyui/easyui.css" rel="stylesheet">
+    <link href="../css/easyui/icon.css" rel="stylesheet">
+    <script src="../lib/jquery.easyui.min.js"></script>
+    <style type="text/css">
+    	div.datagrid-view {
+		    position: relative;
+		    overflow: visible;
+		}
+    </style>
+</head>
+
+<body id="page-top" ng-app="myApp">
+
+<!-- Header -->
+<div style="height: 100%;width:100%;" ng-controller="showViables">
+    <div id="first">
+        <div class="row">
+            <div class="col-md-8">
+                <table class="table table-bordered">
+                    <caption>
+                        <h3>上传数据请按照以下格式(<a onclick="$('#confirm').modal('show')">CSV文件</a>):</h3>
+                    </caption>
+                    <thead>
+                    <tr>
+                        <th>idcard，</th>
+                        <th>phone，</th>
+                        <th>name，</th>
+                        <th>app_date，</th>
+                        <th>is_bad，</th>
+                        <th>其他</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>111211666699882222，</td>
+                        <td>1887776665，</td>
+                        <td>张三，</td>
+                        <td>yyyyMMdd，</td>
+                        <td>0/1,</td>
+                        <td>......</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8">
+                    <span>
+                        <h4>第一步：选择样本</h4>
+                    </span>
+            </div>
+            <div class="col-md-2">
+                <div id="thelist" class="uploader-list"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8">
+                <select id="select-file" class="form-control"></select>
+            </div>
+            <div class="col-md-4">
+                <div class="row">
+                    <div class="col-md-2">
+                        <div id="uploader" class="wu-example">
+                            <div class="btns">
+                                <div id="picker">上传</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-primary" data-toggle="modal" data-target="#filesModel" id="fileManage">
+                            管理上传文件
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                加密方式：
+                <label class="radio-inline">
+                    <input class="" type="radio" name="encrypt" id="optionsRadios1" value="0" checked> 未加密
+                </label>
+                <label class="radio-inline">
+                    <input class="" type="radio" name="encrypt" id="optionsRadios2" value="1">MD5
+                </label>
+                <label class="radio-inline">
+                    <input class="" type="radio" name="encrypt" id="optionsRadios3" value="2">SHA256
+                </label>
+            </div>
+        </div>
+    </div>
+    <div id="main" style="width:100%;">
+        <br>
+        <div class="row">
+            <div class="col-md-10">
+                    <span>
+                        <h4>第二步：选择变量</h4>
+                    </span>
+            </div>
+            <div class="col-md-1">
+                <a href="#" ng-click="saveVars()">保存</a>
+            </div>
+            <div class="col-md-1">
+                <a href="#" ng-click="loadVars()">导入</a>
+            </div>
+        </div>
+        <div class="easyui-treegrid" style="height: 500px; width:95%;" id="table">
+        </div>
+        <br>
+        <div class="row">
+            <button class="btn btn-primary" ng-click="prepareData()" data-toggle="modal" id="prepareData">准备数据
+            </button>
+        </div>
+    </div>
+</div>
+
+<!--核对CSV表头信息-->
+<div class="modal fade" tabindex="-1" role="dialog" id="confirm" aria-labelledby="confirmLabel" aria-hidden="true"
+     style="margin-top: 250px;">
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="confirmLabel">
+                    <span class="glyphicon glyphicon-flash"></span>提示:
+                </h4>
+            </div>
+            <div class="modal-body" style="text-align: center">
+                <h3>是否下载样本文件？</h3>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal"
+                        onclick="window.open('/jointmodel/sample.csv')">确认
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--进度条遮罩层-->
+<div class="modal fade" tabindex="-1" role="dialog" id="loadingModel" aria-labelledby="loadingModelLabel"
+     aria-hidden="true" style="margin-top: 250px;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button id="closeProg" type="button" class="close" data-dismiss="modal" aria-hidden="true" disabled>
+                    <!--&times;-->
+                </button>
+                <h4 class="modal-title" id="loadingModelLabel">
+                    数据准备进度
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="progress progress-striped active">
+                    <div id="prog" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow=""
+                         aria-valuemin="0" aria-valuemax="100" style="width:0%;">
+                        <span id="proglabel"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--数据准备完成弹出页面-->
+<div class="modal fade" tabindex="-1" role="dialog" id="prepareDone" aria-labelledby="prepareDoneLabel"
+     aria-hidden="true"
+     style="margin-top: 250px;">
+    <div class="modal-dialog">
+
+        <div class="modal-content" onclick="$('#prepareDone').modal('hide');">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="prepareDoneLabel">
+                    <span class="glyphicon glyphicon-check"></span>
+                </h4>
+            </div>
+            <div class="modal-body" style="text-align:center;background-color: #20B2AA;">
+                <h3>数据准备完成，请进入建模环境......</h3>
+            </div>
+        </div>
+    </div>
+</div>
+<!--任务失败弹出页面-->
+<div class="modal fade" tabindex="-1" role="dialog" id="taskFailed" aria-labelledby="taskFailedLabel" aria-hidden="true"
+     style="margin-top: 250px;">
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="taskFailedLabel">
+                    提示:
+                </h4>
+            </div>
+            <div class="modal-body">
+                <h3 id="taskFailedErrorMsg">任务失败！</h3>
+            </div>
+        </div>
+    </div>
+</div>
+<!--核对CSV表头信息-->
+<div class="modal fade" tabindex="-1" role="dialog" id="checkHead" aria-labelledby="checkHeadLabel" aria-hidden="true"
+     style="margin-top: 250px;">
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="checkHeadLabel">
+                    <span class="glyphicon glyphicon-flash"></span>提示:
+                </h4>
+            </div>
+            <div class="modal-body">
+                <h3 id="errMsg">请核对CSV表头信息！</h3>
+            </div>
+        </div>
+    </div>
+</div>
+<!--展示用户目录下的文件-->
+<div class="modal fade" tabindex="-1" role="dialog" id="filesModel" aria-labelledby="filesModelLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button id="" type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="filesModelLabel">
+                    上传文件管理：
+                </h4>
+            </div>
+            <div class="modal-body">
+                <button onclick="removeit()" class="btn btn-primary ">删除文件<span
+                        class="glyphicon glyphicon-trash"></span></button>
+                <button onclick="accept()" class="btn btn-primary">更改文件名<span class="glyphicon glyphicon-pencil"></span>
+                </button>
+                <br><br>
+                <table id="dg" class="easyui-datagrid" style="width:550px;height:auto" data-options="singleSelect:true,
+                                    onClickCell: onClickCell,
+                                    onEndEdit: onEndEdit,
+                                    url:'/jointmodel/variable/importFiles',method:'get'">
+                    <thead>
+                    <tr>
+                        <th data-options="field:'fileName',width:180,editor:'textbox'">文件名</th>
+                        <th data-options="field:'fileSize',width:160">文件大小(KB)</th>
+                        <th data-options="field:'uploadDate',width:200">上传时间</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="tb" style="height:auto">
+    <div id="search" style="float: right;">
+        搜索变量：<input id="searchWord" class="easyui-searchbox" searcher="search" prompt=""
+                    style="width: 200px; vertical-align: middle">
+    </div>
+</div>
+
+</body>
+<script type="text/javascript">
+    $(document).ajaxSuccess(function (event, request, settings) {
+        if (request.responseJSON.errCode === '9560') {
+            window.parent.location.href = "/jointmodel/login.html";
+            return;
+        }
+    });
+    //弹框之后再次加载数据
+    $('#filesModel').on('shown.bs.modal', function () {
+        $("#dg").datagrid('reload');
+    });
+
+    function search() {
+        var searchWord = $("#searchWord").val();
+        $("#table").treegrid({
+            url: '/jointmodel/variable/api/showTree?searchWord=' + searchWord,
+            method: 'get',
+            height: 450,
+            checkbox: true,
+            rownumbers: true,
+            idField: 'id',
+            loadMsg: "变量加载中......",
+            treeField: 'name',
+            toolbar: "#tb",
+            onLoadSuccess: function () {
+                $("span").remove(".tree-file");
+                $("span").remove(".tree-folder");
+            },
+            columns: [
+                [{
+                    field: 'name',
+                    title: '变量名',
+                    width: 350,
+                    halign: 'center'
+                },
+                    {
+                        field: 'chineseName',
+                        title: '中文名',
+                        width: 450,
+                        halign: 'center'
+                        // formatter: function (value, row, index) {
+                        //     return "暂无";
+                        // }
+                    },
+                    {
+                        field: 'type',
+                        title: '数据类型',
+                        width: 150,
+                        halign: 'center',
+                        formatter: function (value, row, index) {
+                            var typeMap = new Map();
+                            typeMap.set(0, '布尔型');
+                            typeMap.set(1, '整型');
+                            typeMap.set(2, '长整型');
+                            typeMap.set(3, '单精度浮点型');
+                            typeMap.set(4, '双精度浮点型');
+                            typeMap.set(5, '字符型');
+                            typeMap.set(6, '未知');
+                            return typeMap.get(value);
+                        }
+                    },
+                    {
+                        field: 'description',
+                        title: '变量描述',
+                        width: 550,
+                        halign: 'center'
+                    }
+                ]
+            ]
+        });
+    }
+
+
+    function importFiles(name) {
+        $.ajax({
+            type: 'GET',
+            url: '/jointmodel/variable/importFiles',
+            success: function (data) {
+                if (data.total > 0) {
+                    $("#select-file").empty();
+                    var fileNames = data.rows;
+                    alignFile(fileNames);
+                    if (name.indexOf('csv') != -1) {
+                        $("#select-file option[value='" + name + "']").attr("selected", true);  //上传之后，选中该文件
+                    }
+                } else {
+                    $("#select-file").empty();
+                }
+            }
+        });
+    }
+
+    function alignFile(fileNames) {
+        var fixedLen = 40;
+        for (var j = 0; j < fileNames.length; j++) {
+            tmpName = getCell(fixedLen - fileNames[j].fileName.length);
+            tmpSize = getCell(fixedLen - fileNames[j].fileSize.length);
+            $("#select-file").prepend("<option value='" + fileNames[j].fileName + "'>" + fileNames[j].fileName +
+                tmpName + "文件大小(KB)：" + fileNames[j].fileSize + tmpSize + "上传时间：" + fileNames[j].uploadDate +
+                "</option>");
+        }
+    }
+
+    function getCell(num) {
+        var result = "";
+        if (num < 0) return result;
+        else if (num == 0) {
+            return "=";
+        }
+        for (var i = 0; i < num; i++) {
+            result += '~';
+        }
+        return result;
+    }
+
+    importFiles('');
+
+    var editIndex = undefined;
+
+    function endEditing() {
+        if (editIndex == undefined) {
+            return true
+        }
+        if ($('#dg').datagrid('validateRow', editIndex)) {
+            $('#dg').datagrid('endEdit', editIndex);
+            editIndex = undefined;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function onClickCell(index, field) {
+        if (editIndex != index) {
+            if (endEditing()) {
+                $('#dg').datagrid('selectRow', index)
+                    .datagrid('beginEdit', index);
+                var ed = $('#dg').datagrid('getEditor', {
+                    index: index,
+                    field: field
+                });
+                if (ed) {
+                    ($(ed.target).data('textbox') ? $(ed.target).textbox('textbox') : $(ed.target)).focus();
+                }
+                editIndex = index;
+            } else {
+                setTimeout(function () {
+                    $('#dg').datagrid('selectRow', editIndex);
+                }, 0);
+            }
+        }
+    }
+
+    function onEndEdit(index, row) {
+        var ed = $(this).datagrid('getEditor', {
+            index: index,
+            field: 'fileName'
+        });
+        row.fileName = $(ed.target).combobox('getText');
+    }
+
+    function removeit() {
+        if (editIndex == undefined) {
+            return
+        }
+        var rowDelete = $('#dg').datagrid('getSelected', editIndex);
+        $('#dg').datagrid('cancelEdit', editIndex)
+            .datagrid('deleteRow', editIndex);
+        $.ajax({
+            type: 'GET',
+            url: '/jointmodel/variable/deleteFile?fileName=' + rowDelete.fileName,
+            success: function (data) {
+                var fileNames = data.success;
+                importFiles('');
+            }
+        });
+        editIndex = undefined;
+    }
+
+    function accept() {
+        if (endEditing()) {
+            var row = $('#dg').datagrid('getSelected', editIndex);
+            console.log(row);
+            $.ajax({
+                type: 'POST',
+                contentType: 'application/json;charset=UTF-8',
+                url: '/jointmodel/variable/renameFile',
+                data: JSON.stringify({
+                    oldFileName: row.oldFileName,
+                    newFileName: row.fileName
+                }),
+                dataType: 'JSON',
+                // Content-Type:
+                success: function (data) {
+                    var status = data.status;
+                    importFiles('');
+                }
+            });
+            $('#dg').datagrid('acceptChanges');
+        }
+    }
+
+    jQuery(function () {
+        var $ = jQuery;
+        var $list = $('#thelist');
+        var $btn = $('#ctlBtn');
+        var state = 'pending';
+        var uploader;
+        $(document).ajaxSuccess(function (event, request, settings) {
+            if (request.responseJSON.errCode === '9560') {
+                window.parent.location.href = "/jointmodel/login.html";
+                return;
+            }
+        });
+        uploader = WebUploader.create({
+            resize: false,
+            auto: true,
+            server: '/jointmodel/variable/upload',
+            pick: '#picker',
+            accept: {
+                title: 'Excel',
+                extensions: 'csv',
+                mimeTypes: 'text/comma-separated-values' /*限制选择文件的类型*/
+            }
+        });
+        // 当有文件添加进来的时候
+        uploader.on('fileQueued', function (file) {
+            $list.append('<div id="' + file.id + '" class="item">' +
+                // '<h4 class="info">' + file.name + '</h4>' +
+                //  '<p class="state">等待上传...</p>' +
+                '</div>');
+        });
+        uploader.on('uploadProgress', function (file, percentage) {
+            var $li = $('#' + file.id),
+                $percent = $li.find('.progress .progress-bar');
+            if (!$percent.length) {
+                $percent = $('<div class="progress progress-striped active">' +
+                    '<div class="progress-bar" role="progressbar" style="width: 0%">' +
+                    '</div>' +
+                    '</div>').appendTo($li).find('.progress-bar');
+            }
+
+            $li.find('p.state').text('上传中');
+            $percent.css('width', percentage * 100 + '%');
+        });
+        uploader.on('uploadSuccess', function (file, response) {
+            if (response.success == false) {
+                $("#errMsg").text(response.errMsg);
+                $("#checkHead").modal('show')
+                return;
+            }
+            uploader.removeFile(file);
+            $('#' + file.id).find('p.state').text('已上传');
+            importFiles(file.name);
+            console.log(file.name);
+            // $("#select-file").attr("value",file.name);
+
+            $("#dg").datagrid('reload');
+
+        });
+        uploader.on('uploadError', function (file) {
+            $('#' + file.id).find('p.state').text('上传出错');
+            alert("error");
+        });
+        uploader.on('uploadComplete', function (file) {
+            $('#' + file.id).find('.progress').fadeOut();
+        });
+        uploader.on('all', function (type) {
+            if (type === 'startUpload') {
+                state = 'uploading';
+            } else if (type === 'stopUpload') {
+                state = 'paused';
+            } else if (type === 'uploadFinished') {
+                state = 'done';
+            }
+            if (state === 'uploading') {
+                $btn.text('暂停上传');
+            } else {
+                $btn.text('开始上传');
+            }
+        });
+        // 开始上传 按钮点击事件 触发 上传方法
+        // 如果开启了自动上传，则不必要
+        $btn.on('click', function () {
+            if (state === 'uploading') {
+                uploader.stop();
+            } else {
+                uploader.upload();
+            }
+        });
+    });
+
+    //加载表格中的数据
+    $("#table").treegrid({
+        url: '/jointmodel/variable/api/showTree?searchWord=',
+        method: 'get',
+        height: 450,
+        checkbox: true,
+        iconCls: 'icon-ok',
+        rownumbers: true,
+        idField: 'id',
+        loadMsg: "变量加载中......",
+        treeField: 'name',
+        toolbar: "#tb",
+        onLoadSuccess: function () {
+            $("span").remove(".tree-file");
+            $("span").remove(".tree-folder");
+        },
+        //loadFilter: myLoadFilter,
+        columns: [
+            [{
+                field: 'name',
+                title: '变量名',
+                width: 350,
+                halign: 'center'
+            },
+                {
+                    field: 'chineseName',
+                    title: '中文名',
+                    width: 450,
+                    halign: 'center'
+                    // formatter: function (value, row, index) {
+                    //     return "暂无";
+                    // }
+                },
+                {
+                    field: 'type',
+                    title: '数据类型',
+                    width: 150,
+                    halign: 'center',
+                    formatter: function (value, row, index) {
+                        var typeMap = new Map();
+                        typeMap.set(0, '布尔型');
+                        typeMap.set(1, '整型');
+                        typeMap.set(2, '长整型');
+                        typeMap.set(3, '单精度浮点型');
+                        typeMap.set(4, '双精度浮点型');
+                        typeMap.set(5, '字符型');
+                        typeMap.set(6, '未知');
+                        return typeMap.get(value);
+                    }
+                },
+                {
+                    field: 'description',
+                    title: '变量描述',
+                    width: 550,
+                    halign: 'center'
+                }
+            ]
+        ]
+    });
+
+</script>
+
+</html>

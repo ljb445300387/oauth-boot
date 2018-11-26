@@ -1,15 +1,13 @@
 package club.yuit.oauth.boot.config;
 
-import org.mybatis.spring.annotation.MapperScan;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
+
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
@@ -22,12 +20,9 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author yuit
- * @create time 2018/10/9  15:08
+ * @create time 2018/10/9 15:08
  * @description
  * @modify by
  * @modify time
@@ -40,16 +35,19 @@ public class CoreConfig extends WebMvcConfigurationSupport {
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("/swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
 		registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+		registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
 	}
 
 	/**
-	 * Could not resolve view with name 'forward:/oauth/confirm_access' in servlet with name 'dispatcherServlet'
+	 * Could not resolve view with name 'forward:/oauth/confirm_access' in
+	 * servlet with name 'dispatcherServlet'
+	 * 
 	 * @param registry
 	 */
-	/*@Override
-	protected void configureViewResolvers(ViewResolverRegistry registry) {
-	    registry.viewResolver(new InternalResourceViewResolver());
-	}*/
+	/*
+	 * @Override protected void configureViewResolvers(ViewResolverRegistry
+	 * registry) { registry.viewResolver(new InternalResourceViewResolver()); }
+	 */
 
 	@Bean
 	public Docket docket() {

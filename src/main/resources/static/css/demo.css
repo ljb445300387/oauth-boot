@@ -1,0 +1,78 @@
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+#first {
+    width: 100%;
+    height: 20%;
+    margin-left: 20px;
+
+}
+
+#main {
+    width: 100%;
+    height: 80%;
+    margin-left: 20px;
+}
+
+#display {
+    width: 70%;
+    height: 80%;
+    position: absolute !important;
+    top: 0 !important;
+}
+
+.node circle {
+    cursor: pointer;
+    fill: #fff;
+    stroke: steelblue;
+    stroke-width: 2px;
+}
+
+.node text {
+    font-size: 12px;
+}
+
+.link {
+    fill: none;
+    stroke: #ccc;
+    stroke-width: 1.5px;
+}
+
+#picker div.webuploader-pick {
+    height: 30px;
+    padding: 6px 15px;
+    margin-top: 3px;
+    height: 30px !important;
+}
+
+#picker {
+    float: left;
+}
+
+#ctlBtn {
+    float: left;
+    height: 30px;
+    margin-left: 15px;
+    margin-top: 3px;
+    width: 90px;
+}
+
+#loginBody {
+
+}
+
+.center-in-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);;
+}

@@ -1,7 +1,5 @@
 server:
   port: 8000
-#  servlet:
-#    context-path: /api/v1
 
 spring:
   application:
@@ -15,7 +13,7 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
   #redis 配置
   redis:
-    host: 127.0.0.1
+    host: 192.168.202.217
     port: 6379
     password: 
     jedis:
@@ -31,7 +29,7 @@ spring:
     suffix: .html
     cache: false
 
-logging.level.org.springframework.security: DEBUG
+logging.level.org.springframework.security: info
 
 
 mybatis-plus:
@@ -47,6 +45,5 @@ boot:
   oauth:
     token-store-type: redis
     token-signing-key: 123123
-
 
 

@@ -51,6 +51,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		web.ignoring().antMatchers(//
 				"/swagger-ui.html/**", //
 				"/webjars/**", //
+				"/static/bower_components/**", //
+				"/bower_components/bootstrap/dist/css/bootstrap.min.css", //
+				"/css/**", //
+				"/dist/**", //
+				"/fonts/**", //
+				"/lib/**", //
+				"/pages/**", //
 				"/swagger-resources/**", //
 				"/v2/api-docs/**", //
 				"/swagger-resources/configuration/ui/**", //
@@ -69,11 +76,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http
 				// 必须配置，不然OAuth2的http配置不生效----不明觉厉
 				.requestMatchers()//
-				.antMatchers("/auth/login", properties.getLoginProcessUrl(), "/oauth/authorize")//
+				.antMatchers("/auth/login", properties.getLoginProcessUrl(),
+						"/bower_components/bootstrap/dist/css/bootstrap.min.css",
+						"/oauth/authorize")//
 				.and()//
 				.authorizeRequests()//
 				// 自定义页面或处理url是，如果不配置全局允许，浏览器会提示服务器将页面转发多次
-				.antMatchers("/auth/login", properties.getLoginProcessUrl())//
+				.antMatchers("/auth/login",
+						properties.getLoginProcessUrl(),
+						"/bower_components/bootstrap/dist/css/bootstrap.min.css",
+						"/bower_components/**", //
+						"/css/**", //
+						"/dist/**", //
+						"/fonts/**", //
+						"/lib/**", //
+						"/bower_components/**")//
 				.permitAll()//
 				.anyRequest()//
 				.authenticated();

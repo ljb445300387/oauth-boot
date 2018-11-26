@@ -23,7 +23,7 @@ public class BaseMainController {
 	@GetMapping("/auth/login")
 	public String loginPage(Model model) {
 		model.addAttribute("loginProcessUrl", properties.getLoginProcessUrl());
-		return "base-login";
+		return "login";
 	}
 
 }
