@@ -12,14 +12,13 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import club.yuit.oauth.boot.support.BootLoginFailureHandler;
 import club.yuit.oauth.boot.support.BootSecurityProperties;
 import club.yuit.oauth.boot.support.BootUserDetailService;
 import club.yuit.oauth.boot.support.oauth2.BootOAuth2AuthExceptionEntryPoint;
 
 /**
  * @author yuit
- * @create time 2018/10/10  11:48
+ * @create time 2018/10/10 11:48
  * @description
  * @modify by
  * @modify time
@@ -34,8 +33,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private BootSecurityProperties properties;
 
-	@Autowired
-	private BootLoginFailureHandler handler;
+	// @Autowired
+	// private BootLoginFailureHandler handler;
 
 	@Autowired
 	BootOAuth2AuthExceptionEntryPoint authenticationEntryPoint;
@@ -77,15 +76,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				// 必须配置，不然OAuth2的http配置不生效----不明觉厉
 				.requestMatchers()//
 				.antMatchers("/auth/login", properties.getLoginProcessUrl(),
-						"/bower_components/bootstrap/dist/css/bootstrap.min.css",
-						"/oauth/authorize")//
+						"/bower_components/bootstrap/dist/css/bootstrap.min.css", "/oauth/authorize")//
 				.and()//
 				.authorizeRequests()//
 				// 自定义页面或处理url是，如果不配置全局允许，浏览器会提示服务器将页面转发多次
-				.antMatchers("/auth/login",
-						properties.getLoginProcessUrl(),
-						"/bower_components/bootstrap/dist/css/bootstrap.min.css",
-						"/bower_components/**", //
+				.antMatchers("/auth/login", properties.getLoginProcessUrl(),
+						"/bower_components/bootstrap/dist/css/bootstrap.min.css", "/bower_components/**", //
 						"/css/**", //
 						"/dist/**", //
 						"/fonts/**", //
@@ -97,7 +93,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 		// 表单登录
 		http.formLogin()//
-				.failureHandler(handler)//
+				// .failureHandler(handler)//
 				// 页面
 				.loginPage("/auth/login")//
 				// 登录处理url
