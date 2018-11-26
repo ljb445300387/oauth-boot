@@ -35,7 +35,6 @@ public final class BootUserDetailService implements UserDetailsService {
 		if (user == null) {
 			throw new UsernameNotFoundException("用户名不存在");
 		}
-		user.setPassword("$2a$10$ZY/IjJ9YdJw3XPoJkGl3AOz7IfF10eh/S9yB8IeojLNmsyGW9qOnK");
 		user.setIsEnable(true);
 		user.setIsLocked(false);
 
