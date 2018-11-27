@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,6 +12,9 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import club.yuit.oauth.boot.support.BootSecurityProperties;
 import club.yuit.oauth.boot.support.BootUserDetailService;
@@ -86,6 +90,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 						"/dist/**", //
 						"/fonts/**", //
 						"/lib/**", //
+						"/login**", //
 						"/bower_components/**")//
 				.permitAll()//
 				.anyRequest()//
@@ -98,9 +103,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.loginPage("/auth/login")//
 				// 登录处理url
 				.loginProcessingUrl(properties.getLoginProcessUrl());//
-
 		http.httpBasic().disable();
+		http.csrf().ignoringAntMatchers("/logout/**");
+		http.cors().configurationSource(configurationSource());
 
+	}
+
+	private CorsConfigurationSource configurationSource() {
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		CorsConfiguration config = new CorsConfiguration();
+		config.addAllowedOrigin("*");
+		config.setAllowCredentials(true);
+		config.addAllowedHeader("X-Requested-With");
+		config.addAllowedHeader("Content-Type");
+		config.addAllowedMethod(HttpMethod.POST);
+		source.registerCorsConfiguration("/logout", config);
+		return source;
 	}
 
 	@Override
