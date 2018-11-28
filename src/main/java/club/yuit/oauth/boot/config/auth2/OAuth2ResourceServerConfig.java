@@ -73,7 +73,9 @@ public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter 
 		config.addAllowedHeader("X-Requested-With");
 		config.addAllowedHeader("Content-Type");
 		config.addAllowedMethod(HttpMethod.POST);
+		config.addAllowedMethod(HttpMethod.GET);
 		source.registerCorsConfiguration("/logout", config);
+		source.registerCorsConfiguration("/oauth/authorize", config);
 		return source;
 	}
 
