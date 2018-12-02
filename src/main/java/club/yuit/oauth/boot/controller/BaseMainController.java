@@ -1,11 +1,13 @@
 package club.yuit.oauth.boot.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-
-import club.yuit.oauth.boot.support.BootSecurityProperties;
 
 /**
  * @author yuit
@@ -17,12 +19,8 @@ import club.yuit.oauth.boot.support.BootSecurityProperties;
 @Controller
 public class BaseMainController {
 
-	@Autowired
-	private BootSecurityProperties properties;
-
-	@GetMapping("/auth/login")
-	public String loginPage(Model model) {
-		model.addAttribute("loginProcessUrl", properties.getLoginProcessUrl());
+	@GetMapping("/login")
+	public String loginPage(Model model, HttpServletRequest request, HttpServletResponse response) throws IOException {
 		return "login";
 	}
 

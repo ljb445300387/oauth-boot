@@ -27,7 +27,7 @@ public class BootSecurityProperties {
      */
     private TokenStoreType tokenStoreType = TokenStoreType.memory;
 
-    private String loginProcessUrl="/auth/authorize";
+    private String loginProcessUrl="/login";
 
     /**
      * 日志输出等级，默认 INFO {@NestedConfigurationProperty} 生成嵌套类的配置元数据信息
