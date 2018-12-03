@@ -58,7 +58,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				"/pages/**", //
 				"/swagger-resources/**", //
 				"/v2/api-docs/**", //
-				"/oauth/authorize", //
 				"/auth/authorize", //
 				"/swagger-resources/configuration/ui/**", //
 				"/swagger-resources/configuration/security/**", //
@@ -80,7 +79,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.and()//
 				.authorizeRequests()//
 				// 自定义页面或处理url是，如果不配置全局允许，浏览器会提示服务器将页面转发多次
-				.antMatchers("/login", properties.getLoginProcessUrl(), "/oauth/authorize")//
+				.antMatchers("/login", properties.getLoginProcessUrl())//
 				.permitAll()//
 				.anyRequest()//
 				.authenticated();
