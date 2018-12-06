@@ -1,19 +1,18 @@
 server:
   port: 8000
-
+  servlet:
+    context-path: /juxinli
 spring:
-  application:
-    name: boot-cli
   # mysql 配置
   datasource:
     username: root
-    password: 'CTM#2017admin'
+    password: '1234'
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://192.168.202.217:3306/auth?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    url: jdbc:mysql://127.0.0.1:3306/auth?useUnicode=true&characterEncoding=utf-8&useSSL=false
     type: com.alibaba.druid.pool.DruidDataSource
   #redis 配置
   redis:
-    host: 192.168.202.217
+    host: 127.0.0.1
     port: 6379
     password: 
     jedis:
@@ -29,7 +28,7 @@ spring:
     suffix: .html
     cache: false
 
-logging.level.org.springframework.security: info
+logging.level.org.springframework.security: debug
 
 
 mybatis-plus:
@@ -45,5 +44,3 @@ boot:
   oauth:
     token-store-type: redis
     token-signing-key: 123123
-
-

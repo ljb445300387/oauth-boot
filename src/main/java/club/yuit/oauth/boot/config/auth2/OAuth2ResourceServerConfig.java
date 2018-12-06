@@ -3,6 +3,7 @@ package club.yuit.oauth.boot.config.auth2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
@@ -23,6 +24,7 @@ import club.yuit.oauth.boot.support.oauth2.BootAccessDeniedHandler;
  * @modify by
  * @modify time
  **/
+@Order(6)
 @Configuration
 @EnableResourceServer
 public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter {
@@ -51,15 +53,7 @@ public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter 
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-				.antMatchers("/static/bower_components/bootstrap/dist/css/bootstrap.min.css", //
-						"/static/css/**", //
-						"/static/dist/**", //
-						"/static/fonts/**", //
-						"/static/lib/**", //
-						"/login**", //
-						"/logout**", //
-						"/static/bootstrap.min.css")
-				.permitAll().anyRequest().access("#oauth2.hasAnyScope('all')").and().csrf().disable();
+				.anyRequest().access("#oauth2.hasAnyScope('all')").and().csrf().disable();
 		http.logout().logoutSuccessHandler(logoutSuccessHandler);
 		http.csrf().ignoringAntMatchers("/logout/**");
 		http.cors().configurationSource(configurationSource());

@@ -5,14 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>联合建模平台| 登录</title>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <link rel="stylesheet" type="text/css" href="/static/bower_components/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="/static/bower_components/font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="/static/bower_components/Ionicons/css/ionicons.min.css">
-    <link rel="stylesheet" type="text/css" href="/static/dist/css/AdminLTE.min.css">
+    <link rel="stylesheet" type="text/css" href="/juxinli/static/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/juxinli/static/bower_components/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/juxinli/static/bower_components/Ionicons/css/ionicons.min.css">
+    <link rel="stylesheet" type="text/css" href="/juxinli/static/dist/css/AdminLTE.min.css">
 
-    <script src="/static/lib/angularJS-1.4.6.js"></script>
-    <script src="/static/lib/showVia.js"></script>
-    <link href="/static/css/demo.css" rel="stylesheet">
+    <script src="/juxinli/static/lib/angularJS-1.4.6.js"></script>
+    <script src="/juxinli/static/lib/showVia.js"></script>
+    <link href="/juxinli/static/css/demo.css" rel="stylesheet">
 
 
     <style type="text/css">
@@ -30,15 +30,15 @@
     <div class="login-box-body center-in-center" id="loginBody" ng-controller="logIn"
          style="width: 1200px;background-color: #ECF4FC">
         <div>
-            <img src="/static/dist/img/logo.png">
+            <img src="/juxinli/static/dist/img/logo.png">
         </div>
         <br>
         <div style="float: left;width: 500px;height: 600px;">
-            <img src="/static/dist/img/img.png" class="image">
+            <img src="/juxinli/static/dist/img/img.png" class="image">
         </div>
         <div style="margin-left: 600px;width: 600px;height: 600px; background-color: #ffffff">
             <p class="login-box-msg"></p>
-            <form th:action="${loginProcessUrl}" method="post" style="margin-top: 100px;">
+            <form action="/juxinli/login" method="post" style="margin-top: 100px;">
                 <div class="row" style="height: 10px;">
                     <div class="col-md-2">
                     </div>
@@ -92,8 +92,8 @@
         </div>
     </div>
 </div>
-<script src="/static/lib/2.1.1-jquery.min.js"></script>
-<script src="/static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/juxinli/static/lib/2.1.1-jquery.min.js"></script>
+<script src="/juxinli/static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <script>
     $(function () {
         $("#txtName").focus();//输入焦点

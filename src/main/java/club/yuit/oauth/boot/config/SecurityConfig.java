@@ -55,14 +55,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				"/swagger-ui.html/**", //
 				"/webjars/**", //
 				"/static/bower_components/**", //
-				"/bower_components/bootstrap/dist/css/bootstrap.min.css", //
-				"/css/**", //
-				"/dist/**", //
-				"/fonts/**", //
-				"/lib/**", //
+				"/static/css/**", //
+				"/static/dist/**", //
+				"/static/fonts/**", //
+				"/static/lib/**", //
 				"/pages/**", //
 				"/swagger-resources/**", //
 				"/v2/api-docs/**", //
+				"/auth/authorize", //
 				"/swagger-resources/configuration/ui/**", //
 				"/swagger-resources/configuration/security/**", //
 				"/images/**");
@@ -79,19 +79,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http
 				// 必须配置，不然OAuth2的http配置不生效----不明觉厉
 				.requestMatchers()//
-				.antMatchers("/auth/login", properties.getLoginProcessUrl(),
-						"/bower_components/bootstrap/dist/css/bootstrap.min.css", "/oauth/authorize")//
+				.antMatchers("/login", properties.getLoginProcessUrl(), "/oauth/authorize")//
 				.and()//
 				.authorizeRequests()//
 				// 自定义页面或处理url是，如果不配置全局允许，浏览器会提示服务器将页面转发多次
-				.antMatchers("/auth/login", properties.getLoginProcessUrl(),
-						"/bower_components/bootstrap/dist/css/bootstrap.min.css", "/bower_components/**", //
-						"/css/**", //
-						"/dist/**", //
-						"/fonts/**", //
-						"/lib/**", //
-						"/login**", //
-						"/bower_components/**")//
+				.antMatchers("/login", properties.getLoginProcessUrl())//
 				.permitAll()//
 				.anyRequest()//
 				.authenticated();
@@ -100,13 +92,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.formLogin()//
 				// .failureHandler(handler)//
 				// 页面
-				.loginPage("/auth/login")//
+				.loginPage("/login")//
 				// 登录处理url
-				.loginProcessingUrl(properties.getLoginProcessUrl());//
+				.loginProcessingUrl(properties.getLoginProcessUrl());
 		http.httpBasic().disable();
 		http.csrf().ignoringAntMatchers("/logout/**");
 		http.cors().configurationSource(configurationSource());
-
 	}
 
 	private CorsConfigurationSource configurationSource() {
@@ -133,5 +124,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-
 }
